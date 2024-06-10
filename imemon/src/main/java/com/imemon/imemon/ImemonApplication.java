@@ -8,7 +8,6 @@ import java.util.Map;
 
 @SpringBootApplication
 public class ImemonApplication {
-	public static Map<String, User> loggedUsers;
 	public static void main(String[] args) {
 		SpringApplication.run(ImemonApplication.class, args);
 	}

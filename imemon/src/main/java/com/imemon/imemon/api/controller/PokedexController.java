@@ -27,6 +27,7 @@ public class PokedexController {
     private TypeRepository typeRepository;
 
 
+
     public PokedexController(
             PokemonRepository pokemonRepository,
             PokemonMoveRepository pokemonMoveRepository,
@@ -74,7 +75,7 @@ public class PokedexController {
             Pokemon pokemon = pokemonRepository.findById(id);
             List<PokemonMove> pokemonMoves = pokemonMoveRepository.findAllByPokemonId(id);
             List<PokemonType> pokemonTypes = pokemonTypeRepository.findAllByPokemonId(id);
-            List<PokemonAbility> pokemonAbilities = pokemonAbilityRepository.findAllbyPokemonId(id);
+            List<PokemonAbility> pokemonAbilities = pokemonAbilityRepository.findAllByPokemonId(id);
 
             List<Move> moves = new ArrayList<>();
             List<Ability> abilities = new ArrayList<>();

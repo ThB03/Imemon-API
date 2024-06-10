@@ -1,7 +1,9 @@
 package com.imemon.imemon.api.controller;
 
 import com.imemon.imemon.ImemonApplication;
+import com.imemon.imemon.api.model.LoggedUsers;
 import com.imemon.imemon.api.model.User;
+import com.imemon.imemon.api.repository.LoggedUsersRepository;
 import com.imemon.imemon.api.repository.UserRepository;
 import com.imemon.imemon.api.requests.AuthRequest;
 import com.imemon.imemon.api.requests.LoginRequest;
@@ -13,29 +15,33 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
     private UserRepository userRepository;
+    private LoggedUsersRepository loggedUsersRepository;
 
     private String createSession(User user){
         String session = java.util.UUID.randomUUID().toString();
-        while(ImemonApplication.loggedUsers.get(session) != null){
+        while(loggedUsersRepository.existsBySession(session)){
             session = java.util.UUID.randomUUID().toString();
         }
-        ImemonApplication.loggedUsers.put(session, user);
+        loggedUsersRepository.save(new LoggedUsers(session, user.getUsername()));
         return session;
     }
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, LoggedUsersRepository loggedUsersRepository) {
         this.userRepository = userRepository;
+        this.loggedUsersRepository = loggedUsersRepository;
     }
 
     @PostMapping("/account/login")
-    public UserResponse getUser(@RequestParam LoginRequest loginRequest) {
+    public UserResponse getUser(LoginRequest loginRequest) {
+
+        System.out.println(loginRequest.getEmail());
 
         try{
             User check = userRepository.findByEmail(loginRequest.getEmail());
             if (check != null) {
                 if (loginRequest.getPassword().equals(check.getPassword())) {
                     String session = createSession(check);
-                    return new UserResponse(200, "Succeccfully logged in", check.getUsername(), session);
+                    return new UserResponse(200, "Successfully logged in", check.getUsername(), session);
                 }
                 else{
                     return new UserResponse(401, "Incorrect email or password", null, null);
@@ -52,7 +58,7 @@ public class UserController {
     }
 
     @PostMapping("/account/register")
-    public UserResponse createUser(@RequestBody RegisterRequest registerRequest) {
+    public UserResponse createUser(RegisterRequest registerRequest) {
         try{
             if (userRepository.findByEmail(registerRequest.getEmail()) != null) {
                 return new UserResponse(409, "User already exists", null, null);
@@ -67,15 +73,16 @@ public class UserController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             return new UserResponse(500, "server error", null, null);
         }
     }
 
     @PostMapping("/account/logoff")
-    public SimpleResponse logoutUser(@RequestParam AuthRequest request) {
+    public SimpleResponse logoutUser(AuthRequest request) {
         try {
-            if (ImemonApplication.loggedUsers.containsKey(request.getSession())) {
-                ImemonApplication.loggedUsers.remove(request.getSession());
+            if (loggedUsersRepository.existsBySession(request.getSession())) {
+                loggedUsersRepository.deleteBySession(request.getSession());
             }
         return new SimpleResponse(200, "Succeccfully logged out");
         }
