@@ -1,5 +1,6 @@
 package com.imemon.imemon.api.model;
 
+import com.imemon.imemon.api.requests.TeamRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -113,4 +114,39 @@ public class Team {
 
     @Column(name = "move64")
     private long move64;
+
+    public Team(TeamRequest teamRequest) {
+        this.username = teamRequest.getUsername();
+        this.teamName = teamRequest.getTeamName();
+        this.poke1 = teamRequest.getPoke1();
+        this.move11 = teamRequest.getMove11();
+        this.move12 = teamRequest.getMove12();
+        this.move13 = teamRequest.getMove13();
+        this.move14 = teamRequest.getMove14();
+        this.poke2 = teamRequest.getPoke2();
+        this.move21 = teamRequest.getMove21();
+        this.move22 = teamRequest.getMove22();
+        this.move23 = teamRequest.getMove23();
+        this.move24 = teamRequest.getMove24();
+        this.poke3 = teamRequest.getPoke3();
+        this.move31 = teamRequest.getMove31();
+        this.move32 = teamRequest.getMove32();
+        this.move33 = teamRequest.getMove33();
+        this.move34 = teamRequest.getMove34();
+        this.poke4 = teamRequest.getPoke4();
+        this.move41 = teamRequest.getMove41();
+        this.move42 = teamRequest.getMove42();
+        this.move43 = teamRequest.getMove43();
+        this.move44 = teamRequest.getMove44();
+        this.poke5 = teamRequest.getPoke5();
+        this.move51 = teamRequest.getMove51();
+        this.move52 = teamRequest.getMove52();
+        this.move53 = teamRequest.getMove53();
+        this.move54 = teamRequest.getMove54();
+        this.poke6 = teamRequest.getPoke6();
+        this.move61 = teamRequest.getMove61();
+        this.move62 = teamRequest.getMove62();
+        this.move63 = teamRequest.getMove63();
+        this.move64 = teamRequest.getMove64();
+    }
 }

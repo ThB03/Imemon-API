@@ -40,7 +40,13 @@ public class UserController {
             User check = userRepository.findByEmail(loginRequest.getEmail());
             if (check != null) {
                 if (loginRequest.getPassword().equals(check.getPassword())) {
-                    String session = createSession(check);
+                    String session = "";
+                    LoggedUsers loggedUser = loggedUsersRepository.findByUsername(check.getUsername());
+                    if(loggedUser != null) {
+                        session = loggedUser.getSession();
+                    }
+                    else session = createSession(check);
+
                     return new UserResponse(200, "Successfully logged in", check.getUsername(), session);
                 }
                 else{
@@ -81,10 +87,9 @@ public class UserController {
     @PostMapping("/account/logoff")
     public SimpleResponse logoutUser(AuthRequest request) {
         try {
-            if (loggedUsersRepository.existsBySession(request.getSession())) {
-                loggedUsersRepository.deleteBySession(request.getSession());
-            }
-        return new SimpleResponse(200, "Succeccfully logged out");
+            LoggedUsers loggedUsers = loggedUsersRepository.findBySession(request.getSession());
+            loggedUsersRepository.delete(loggedUsers);
+            return new SimpleResponse(200, "Succeccfully logged out");
         }
         catch(Exception e){
             return new SimpleResponse(200, "Succeccfully logged out");

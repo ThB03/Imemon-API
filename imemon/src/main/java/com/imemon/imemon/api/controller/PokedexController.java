@@ -88,7 +88,7 @@ public class PokedexController {
                 abilities.add(abilityRepository.findById(pokemonAbility.getAbilityId()));
             }
             for (PokemonType pokemonType : pokemonTypes) {
-                types.add(typeRepository.findById(pokemonType.getId()));
+                types.add(typeRepository.findById(pokemonType.getTypeId()));
             }
             return new PokemonResponse(200, "success", new PokemonClass(pokemon, types, abilities, moves));
         }

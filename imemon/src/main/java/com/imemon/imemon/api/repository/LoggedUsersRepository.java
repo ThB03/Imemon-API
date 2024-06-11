@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface LoggedUsersRepository extends JpaRepository<LoggedUsers, Long> {
     LoggedUsers findBySession(String sessionId);
     Boolean existsBySession(String sessionId);
-    void deleteBySession(String sessionId);
+    LoggedUsers findByUsername(String username);
 }
