@@ -56,7 +56,7 @@ public class PokedexController {
                 List<PokemonType> typeList = pokemonTypeRepository.findAllByPokemonId(pokemon.getId());
                 List<Type> pokemonTypes = new ArrayList<>();
                 for (PokemonType pokemonType : typeList) {
-                    pokemonTypes.add(typeRepository.findById(pokemonType.getId()));
+                    pokemonTypes.add(typeRepository.findById(pokemonType.getTypeId()));
                 }
                 PokedexEntryClass pokedexEntry = new PokedexEntryClass(pokemon, pokemonTypes);
                 pokedexEntries.add(pokedexEntry);
