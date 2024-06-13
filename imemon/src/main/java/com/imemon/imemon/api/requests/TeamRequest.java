@@ -12,5 +12,5 @@ public class TeamRequest {
     private String Session;
     private String username;
     private String teamName;
-    private Team team; //will it work?
+    private Team team;
 }

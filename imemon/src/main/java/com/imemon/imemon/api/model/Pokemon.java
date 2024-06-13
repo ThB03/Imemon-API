@@ -43,4 +43,7 @@ public class Pokemon{
 
     @Column(name = "speed")
     private long speed;
+
+    @Column(name = "flavor")
+    private String flavor;
 }
