@@ -7,6 +7,7 @@ import com.imemon.imemon.api.repository.LoggedUsersRepository;
 import com.imemon.imemon.api.repository.TeamRepository;
 import com.imemon.imemon.api.requests.AuthRequest;
 import com.imemon.imemon.api.requests.TeamRequest;
+import com.imemon.imemon.api.responses.SimpleResponse;
 import com.imemon.imemon.api.responses.TeamResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,35 +40,36 @@ public class TeamController {
     }
 
     @PostMapping("/teams/delete/{teamId}")
-    public TeamResponse deleteTeams(AuthRequest request, @PathVariable long teamId) {
+    public SimpleResponse deleteTeams(AuthRequest request, @PathVariable long teamId) {
         try{
             if(loggedUsersRepository.findBySession(request.getSession()).getUsername().equals(request.getUsername())){
                 if(teamRepository.findById(teamId).getUsername().equals(request.getUsername())) {
                     teamRepository.deleteById(teamId);
-                    return new TeamResponse(200, "Returning updated teams", teamRepository.findAllByUsername(request.getUsername()));
+                    return new SimpleResponse(200, "Deleted Team");
                 }
-                else return new TeamResponse(404, "no team exists with this id", null);
+                else return new SimpleResponse(404, "no user team exists with this id");
 
             }
-            else return new TeamResponse(403, "not authenticated", null);
+            else return new SimpleResponse(403, "not authenticated");
         }
         catch(Exception e){
-            return new TeamResponse(500, "server error", null);
+            return new SimpleResponse(500, "server error");
         }
     }
 
 
     @PostMapping("teams/add")
-    public TeamResponse addTeam(TeamRequest request) {
+    public SimpleResponse addTeam(TeamRequest request) {
         try{
-            if(loggedUsersRepository.findBySession(request.getSession()).getUsername().equals(request.getUsername())){
-                teamRepository.save(request.getTeam());
-                return new TeamResponse(200, "Returning teams", teamRepository.findAllByUsername(request.getUsername()));
+            String session = request.getSession();
+            if(loggedUsersRepository.findBySession(session).getUsername().equals(request.getUsername())){
+                teamRepository.save(new Team(request));
+                return new SimpleResponse(200, "Team added");
             }
-            else return new TeamResponse(403, "not authenticated", null);
+            else return new SimpleResponse(403, "not authenticated");
         }
         catch(Exception e){
-            return new TeamResponse(500, "server error", null);
+            return new SimpleResponse(500, "server error");
         }
 
     }

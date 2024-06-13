@@ -26,6 +26,7 @@ public class PokemonClass {
     private long spAtt;
     private long spDef;
     private long speed;
+    private String flavor;
     private List<Type> types;
     private List<Ability> abilities;
     private List<Move> moves;
@@ -41,6 +42,7 @@ public class PokemonClass {
         this.spAtt = pokemon.getSpAtt();
         this.spDef = pokemon.getSpDef();
         this.speed = pokemon.getSpeed();
+        this.flavor = pokemon.getFlavor();
         this.types = types;
         this.abilities = abilities;
         this.moves = moves;
