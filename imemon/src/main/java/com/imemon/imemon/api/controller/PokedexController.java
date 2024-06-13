@@ -55,7 +55,7 @@ public class PokedexController {
                 List<PokemonType> typeList = pokemonTypeRepository.findAllByPokemonId(pokemon.getId());
                 List<Type> pokemonTypes = new ArrayList<>();
                 for (PokemonType pokemonType : typeList) {
-                    pokemonTypes.add(typeRepository.findById(pokemonType.getId()));
+                    pokemonTypes.add(typeRepository.findById(pokemonType.getTypeId()));
                 }
                 PokedexEntryClass pokedexEntry = new PokedexEntryClass(pokemon, pokemonTypes);
                 pokedexEntries.add(pokedexEntry);
@@ -65,23 +65,6 @@ public class PokedexController {
         }
         catch(Exception e) {
             return new PokedexResponse(500, "server error", null);
-        }
-    }
-
-    @GetMapping("/pokedex/simple")
-    public SimplePokedexResponse getSimplePokedex() {
-        try {
-            List<SimplePokedexEntryClass> pokedexEntries = new ArrayList<>();
-            List<Pokemon> pokemonList = pokemonRepository.findAll();
-            for (Pokemon pokemon : pokemonList) {
-                SimplePokedexEntryClass pokedexEntry = new SimplePokedexEntryClass(pokemon);
-                pokedexEntries.add(pokedexEntry);
-            }
-
-            return new SimplePokedexResponse(200, "", new SimplePokedex(pokedexEntries));
-        }
-        catch(Exception e) {
-            return new SimplePokedexResponse(500, "server error", null);
         }
     }
 
@@ -104,7 +87,7 @@ public class PokedexController {
                 abilities.add(abilityRepository.findById(pokemonAbility.getAbilityId()));
             }
             for (PokemonType pokemonType : pokemonTypes) {
-                types.add(typeRepository.findById(pokemonType.getId()));
+                types.add(typeRepository.findById(pokemonType.getTypeId()));
             }
             return new PokemonResponse(200, "success", new PokemonClass(pokemon, types, abilities, moves));
         }
@@ -126,6 +109,23 @@ public class PokedexController {
         }
         catch(Exception e) {
             return new MoveResponse(500, "server error", null);
+        }
+    }
+
+    @GetMapping("/pokedex/simple")
+    public SimplePokedexResponse getSimplePokedex() {
+        try {
+            List<SimplePokedexEntryClass> pokedexEntries = new ArrayList<>();
+            List<Pokemon> pokemonList = pokemonRepository.findAll();
+            for (Pokemon pokemon : pokemonList) {
+                SimplePokedexEntryClass pokedexEntry = new SimplePokedexEntryClass(pokemon);
+                pokedexEntries.add(pokedexEntry);
+            }
+
+            return new SimplePokedexResponse(200, "", new SimplePokedex(pokedexEntries));
+        }
+        catch(Exception e) {
+            return new SimplePokedexResponse(500, "server error", null);
         }
     }
 
