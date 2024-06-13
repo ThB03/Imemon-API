@@ -1,14 +1,13 @@
 package com.imemon.imemon.api.controller;
 
 
-import com.imemon.imemon.api.classes.Pokedex;
-import com.imemon.imemon.api.classes.PokedexEntryClass;
-import com.imemon.imemon.api.classes.PokemonClass;
+import com.imemon.imemon.api.classes.*;
 import com.imemon.imemon.api.model.*;
 import com.imemon.imemon.api.repository.*;
 import com.imemon.imemon.api.responses.MoveResponse;
 import com.imemon.imemon.api.responses.PokedexResponse;
 import com.imemon.imemon.api.responses.PokemonResponse;
+import com.imemon.imemon.api.responses.SimplePokedexResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -110,6 +109,23 @@ public class PokedexController {
         }
         catch(Exception e) {
             return new MoveResponse(500, "server error", null);
+        }
+    }
+
+    @GetMapping("/pokedex/simple")
+    public SimplePokedexResponse getSimplePokedex() {
+        try {
+            List<SimplePokedexEntryClass> pokedexEntries = new ArrayList<>();
+            List<Pokemon> pokemonList = pokemonRepository.findAll();
+            for (Pokemon pokemon : pokemonList) {
+                SimplePokedexEntryClass pokedexEntry = new SimplePokedexEntryClass(pokemon);
+                pokedexEntries.add(pokedexEntry);
+            }
+
+            return new SimplePokedexResponse(200, "", new SimplePokedex(pokedexEntries));
+        }
+        catch(Exception e) {
+            return new SimplePokedexResponse(500, "server error", null);
         }
     }
 
